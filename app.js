@@ -13,6 +13,8 @@ var contactRouter = require("./app_server/routes/contact");
 var mealsRouter = require("./app_server/routes/meals");
 var roomsRouter = require("./app_server/routes/rooms");
 
+// var databaseDb = require("./app_api/models/db");
+
 // I defined hbs variable, as it is used in line 27 and without
 // defining it, npm did not run and gave this error: ReferenceError: hbs is not defined
 const hbs = require('hbs');

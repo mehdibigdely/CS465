@@ -4,7 +4,7 @@ var trips = JSON.parse(fs.readFileSync('./data/trips.json',
 
 /* GET travel view */
 const travel = (req, res) => {
-    res.render('travel', { title: 'Travlr Getaways tlvr' });
+    res.render('travel', { title: 'Travlr Getaways tlvr', trips });
    };
    module.exports = {
     travel
