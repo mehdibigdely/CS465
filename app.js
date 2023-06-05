@@ -12,8 +12,8 @@ var aboutRouter = require("./app_server/routes/about");
 var contactRouter = require("./app_server/routes/contact");
 var mealsRouter = require("./app_server/routes/meals");
 var roomsRouter = require("./app_server/routes/rooms");
-
-// var databaseDb = require("./app_api/models/db");
+var databaseDB = require("./app_api/database/db");
+const apiRouter = require('./app_api/routes/index');
 
 // I defined hbs variable, as it is used in line 27 and without
 // defining it, npm did not run and gave this error: ReferenceError: hbs is not defined
@@ -45,6 +45,7 @@ app.use("/about", aboutRouter);
 app.use("/contact", contactRouter);
 app.use("/meals", mealsRouter);
 app.use("/rooms", roomsRouter);
+app.use('/api', apiRouter );
 // added using StackOverflow
 // const expressHbs = require('express-handlebars');
 // app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs'}));
