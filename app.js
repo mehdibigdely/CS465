@@ -21,7 +21,7 @@ const hbs = require('hbs');
 
 const app = express();
 
-// view engine setup
+// view engine setup *
 app.set('views', path.join(__dirname, 'app_server','views'));
 app.set('view engine', 'hbs');
 
@@ -37,6 +37,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// allow CORS
+app.use('api', (req, res, next)=> {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  next();
+})
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/travel', travelRouter);
@@ -46,6 +54,7 @@ app.use("/contact", contactRouter);
 app.use("/meals", mealsRouter);
 app.use("/rooms", roomsRouter);
 app.use('/api', apiRouter );
+
 // added using StackOverflow
 // const expressHbs = require('express-handlebars');
 // app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs'}));

@@ -4,6 +4,6 @@ var router = express.Router();
 /* GET travel page. */
 const controller = require("../controllers/travel");
 
-router.get("/", controller.travel);
+router.get("/", controller.travelList);
 
 module.exports = router;
