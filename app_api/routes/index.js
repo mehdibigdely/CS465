@@ -1,33 +1,48 @@
-const authController = require("../controllers/authentication");
-const express = require('express');
-const router = express.Router();
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
+import { TripDataService } from '../services/trip-data.service';
 
-const tripsController = require('../controllers/trips');
+@Component({
+  selector: 'app-add-trip',
+  templateUrl: './add-trip.component.html',
+  styleUrls: ['./add-trip.component.css']
+})
+export class AddTripComponent implements OnInit {
+  addForm: FormGroup;
+  submitted = false;
 
-const jwt = require("express-jwt");
-const auth = jwt({
-  secret: process.env.JWT_SECRET,
-  userProperty: "payload",
-  algorithms: ["HS256"],
-});
-  
+  constructor(
+  private formBuilder: FormBuilder,
+  private router: Router,
+  private tripService: TripDataService
+  ) { }
 
-router
-    .route("/login")
-    .post(authController.login);
+  ngOnInit() {
+    this.addForm = this.formBuilder.group({
+      _id: [],
+      code: ['', Validators.required],
+      name: ['', Validators.required],
+      length: ['', Validators.required],
+      start: ['', Validators.required],
+      resort: ['', Validators.required],
+      perPerson: ['', Validators.required],
+      image: ['', Validators.required],
+      description: ['', Validators.required],
+    })
+  }
 
-router
-    .route("/register")
-    .post(authController.register);
+  onSubmit() {
+    this.submitted = true;
+    if(this.addForm.valid){
+    this.tripService.addTrip(this.addForm.value)
+    .then( data => {
+      console.log(data);
+      this.router.navigate(['']);
+    });
+  }
+}
 
-router
-    .route('/trips')
-    .get(tripsController.tripsList)
-    .post(auth, tripsController.tripsAddTrip);
-
-router
-    .route('/trips/:tripCode')
-    .get(tripsController.tripsFindCode)
-    .put(auth, tripsController.tripsUpdateTrip);  
-
-module.exports = router;
+// get the form short name to access the form fields
+get f() { return this.addForm.controls; }
+}
