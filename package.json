@@ -1,4 +1,4 @@
-"name": "travlr",
+{"name": "travlr",
 "version": "1.0.0",
 "description": "Travlr Getaways MB",
 "author": "SNHU",
@@ -30,4 +30,5 @@
 "devDependencies": {
   "hbs": "^4.2.0",
   "seedgoose": "^2.0.2"
+}
 }
