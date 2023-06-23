@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+# dotenv enviroment variable file
+.env
+.env.test

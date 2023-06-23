@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -13,11 +14,16 @@ var contactRouter = require("./app_server/routes/contact");
 var mealsRouter = require("./app_server/routes/meals");
 var roomsRouter = require("./app_server/routes/rooms");
 var databaseDB = require("./app_api/database/db");
-const apiRouter = require('./app_api/routes/index');
+var apiRouter = require('./app_api/routes/index');
+var passport = require('passport');
+
+require('./app_api/database/db');
+require('./app_api/config/passport');
 
 // I defined hbs variable, as it is used in line 27 and without
 // defining it, npm did not run and gave this error: ReferenceError: hbs is not defined
 const hbs = require('hbs');
+const { UnauthorizedError } = require('express-jwt');
 
 const app = express();
 
@@ -36,6 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
 
 // allow CORS
 app.use("/api", (req, res, next) => {
@@ -65,6 +72,13 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res
+    .status(400)
+    .json({"message": err.name + ": " + err.message});
+  }
+});
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -74,6 +88,14 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+// allow CORS
+app.use('api', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:4200L');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  next();
 });
 
 module.exports = app;
